@@ -8,7 +8,7 @@ require __DIR__ . '/../app/config/paths.php';
 // Inclusion de la navbar
 include BASE_PATH . '/app/views/template/navbar.php';
 ?>
-
+    <!--TEST-->
         <!-- Checkout Page Start -->
         <div class="container-fluid py-5">
             <div class="container py-5">
