@@ -35,7 +35,7 @@ include BASE_PATH . '/app/views/template/navbar.php';
                                     <a href="#" class="text-decoration-none">Forgot password?</a>
                                 </div>
                                 <div class="text-center mt-3">
-                                    Don't have an account? <a href="register.php" class="text-decoration-none">Register here</a>
+                                    Don't have an account? <a href="inscription.php" class="text-decoration-none">Register here</a>
                                 </div>
                             </form>
                         </div>
