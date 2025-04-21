@@ -13,8 +13,8 @@ define('BASE_DIR', dirname(__DIR__, 2));
 
 // Load dependencies
 require_once BASE_DIR . '/config/Connexion.php';
-require_once BASE_DIR . '/controllers/CategorieController.php';
-require_once BASE_DIR . '/models/Categorie.php';
+require_once BASE_DIR . '\controllers\CategorieController.php';
+require_once BASE_DIR . '\models\Categorie.php';
 
 // Initialize controller
 $categorieController = new CategorieController();
@@ -54,7 +54,7 @@ if (isset($_GET['delete'])) {
 $categories = $categorieController->AfficherCategorie();
 
 // Include navbar after all processing
-include __DIR__ . '/navbar.php';
+include     (__DIR__ . '/../template/navbar.php'); 
 ?>
 
 <!-- Cart Page Start -->
@@ -137,4 +137,4 @@ include __DIR__ . '/navbar.php';
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<?php include __DIR__ . '/footer.php'; ?>
+<?php include (__DIR__ . '/../template/footer.php'); ?>

@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../controllers/ArticleController.php';
 $ArticleController = new ArticleController();
 if (
 	isset($_POST["id_RES"]) &&

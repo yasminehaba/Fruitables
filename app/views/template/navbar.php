@@ -1,3 +1,7 @@
+<?php
+session_start();
+$_SESSION['role'] = 'admin'; // à retirer ou adapter selon ton système d’authentification
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,6 +68,9 @@
                             <a href="index.html" class="nav-item nav-link active">Home</a>
                             <a href="shop.html" class="nav-item nav-link">Shop</a>
                             <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
+                            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') : ?>
+        <a href="/cakeShop/dashboard.php" class="nav-item nav-link">Dashboard</a>
+    <?php endif; ?>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
@@ -74,6 +81,7 @@
                                 </div>
                             </div>
                             <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            
                         </div>
                         <div class="d-flex m-3 me-0">
                             <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary"></i></button>
