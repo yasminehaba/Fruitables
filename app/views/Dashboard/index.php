@@ -19,6 +19,10 @@
 
     <!-- Navbar -->
     <?php include_once(__DIR__ . '/../template/navbar.php'); ?>
+    <br> <br> <br> <br> <br> <br> <br> <br> <br>
+    <br>
+    <br>
+    <br>
 
     <!-- Main Content -->
     <div class="container mt-5 pt-5">
@@ -32,7 +36,7 @@
                     </div>
                     <div class="card-body">
                         <p class="card-text">Ajouter, modifier ou supprimer les articles de la boutique.</p>
-                        <a href="/cakeShop/public/index.php?page=articles" class="btn btn-success">Gérer les articles</a>
+                        <a href="articles.php" class="btn btn-success">Gérer les articles</a>
                     </div>
                 </div>
             </div>

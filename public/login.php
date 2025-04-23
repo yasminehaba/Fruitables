@@ -1,4 +1,5 @@
 <?php
+include BASE_PATH . '/app/views/template/navbar.php';
 require_once __DIR__ . '/../app/controllers/UserC.php';
 require_once __DIR__ . '/../app/models/User.php';
 
@@ -6,7 +7,7 @@ require __DIR__ . '/../app/config/paths.php';
 
 
 // Inclusion de la navbar
-include BASE_PATH . '/app/views/template/navbar.php';
+
 ?>
     <!--TEST-->
         <!-- Checkout Page Start -->

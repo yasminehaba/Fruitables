@@ -1,4 +1,5 @@
 <?php
+include     (__DIR__ . '/../template/navbar.php'); 
 // Enable error reporting at the VERY TOP
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -54,7 +55,7 @@ if (isset($_GET['delete'])) {
 $categories = $categorieController->AfficherCategorie();
 
 // Include navbar after all processing
-include     (__DIR__ . '/../template/navbar.php'); 
+
 ?>
 
 <!-- Cart Page Start -->

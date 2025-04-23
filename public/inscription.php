@@ -1,4 +1,11 @@
 <?php
+
+
+
+// Inclusion de la navbar
+include BASE_PATH . '/app/views/template/navbar.php';
+?>
+<?php
 require_once __DIR__ . '/../app/controllers/UserC.php';
 require_once __DIR__ . '/../app/models/User.php';
 
@@ -42,13 +49,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<?php
 
-
-
-// Inclusion de la navbar
-include BASE_PATH . '/app/views/template/navbar.php';
-?>
 
         <!-- Checkout Page Start -->
         <div class="container-fluid py-5">

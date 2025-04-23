@@ -1,24 +1,25 @@
+<?php include __DIR__ . '../../template/navbar.php'; ?>
 <?php
-session_start();
-$_SESSION['role'] = 'admin'; // à retirer ou adapter selon ton système d’authentification
-?>
+// session_start();
+// $_SESSION['role'] = 'admin'; // à retirer ou adapter selon ton système d’authentification
+// ?>
+<?php
+require_once __DIR__ . '/../../controllers/ArticleController.php';
+require_once __DIR__ . '/../../models/Article.php';
 
-<?php
-require_once '../../controllers/ArticleController.php';
-require_once '../../models/Article.php';
 
 $articleController = new ArticleController();
 $articles = $articleController->AfficherArticle();
 ?>
 
-<?php include_once   (__DIR__ . '/../template/navbar.php'); 
+
 
 ?>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Liste des articles</h2>
     <div class="text-end mb-3">
-        <a href="#" class="btn btn-primary">Ajouter un article</a> <!-- Tu pourras remplacer ce lien plus tard -->
+        <a href="articleAdd.php" class="btn btn-primary">Ajouter un article</a> <!-- Tu pourras remplacer ce lien plus tard -->
     </div>
     <table class="table table-bordered table-striped">
         <thead class="table-dark text-center">
@@ -56,4 +57,4 @@ $articles = $articleController->AfficherArticle();
     </table>
 </div>
 
-<?php include_once '/../template/footer.php'; ?>
+<?php include __DIR__ . '../../template/footer.php'; ?>
