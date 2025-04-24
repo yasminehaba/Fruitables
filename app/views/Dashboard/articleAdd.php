@@ -15,34 +15,29 @@ $articles = $ArticleController->AfficherArticle();
 
 // Traitement de l'ajout
 if (
-    isset($_POST["idCat"], $_POST["nom"], $_FILES["image"], $_POST["description"], $_POST["prix"], $_POST["nbStock"], $_POST["status"])
+    isset($_POST["idCat"], $_POST["nom"], $_POST["image"], $_POST["description"], $_POST["prix"], $_POST["nbStock"], $_POST["status"])
 ) {
     if (
-        !empty($_POST["idCat"]) && !empty($_POST["nom"]) && !empty($_FILES["image"]["name"]) &&
+        !empty($_POST["idCat"]) && !empty($_POST["nom"]) && !empty($_POST["image"]) &&
         !empty($_POST["description"]) && !empty($_POST["prix"]) &&
         !empty($_POST["nbStock"]) && !empty($_POST["status"])
     ) {
-        $imageName = basename($_FILES["image"]["name"]);
-        $targetDir = "../../uploads/";
-        $targetFile = $targetDir . $imageName;
+       
 
-        if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+        
             $article = new Article(
                 null,
                 $_POST["idCat"],
                 $_POST["nom"],
-                $imageName, // On stocke juste le nom du fichier
+                $_POST["image"],
                 $_POST["description"],
                 $_POST["prix"],
                 $_POST["nbStock"],
                 $_POST["status"]
             );
             $ArticleController->AjouterArticle($article);
-            header("Location: " . $_SERVER['PHP_SELF']);
-            exit();
-        } else {
-            echo "<div class='alert alert-danger text-center'>Échec de l'upload de l'image.</div>";
-        }
+          
+        
     } else {
         echo "<div class='alert alert-danger text-center'>Tous les champs sont obligatoires.</div>";
     }
@@ -50,7 +45,7 @@ if (
 ?>
 
 
-<form method="POST" enctype="multipart/form-data" class="mb-5">
+<form method="POST"  class="mb-5">
     <div class="row mb-3">
         <div class="col">
             <select name="idCat" class="form-select" required>
@@ -66,7 +61,7 @@ if (
     </div>
         <div class="row mb-3">
             <div class="col">
-			<input type="file" name="image" class="form-control" accept="image/*" required>
+			<input type="text" name="image" class="form-control"  required>
             </div>
             <div class="col">
                 <input type="text" name="description" class="form-control" placeholder="Description" required>
