@@ -3,7 +3,7 @@ require_once __DIR__ . '/../config/Connexion.php';
 require_once __DIR__ . '/../models/Client.php';
 
 class ClientController {
-    public function AjouterUser($client) {
+     function AjouterUser($client) {
         $sql = "INSERT INTO client (nomPrenom, adresse, tlf, email, pwd) 
                 VALUES (:nomPrenom, :adresse, :tlf, :email, :pwd)";
         
@@ -23,7 +23,7 @@ class ClientController {
         }			
     }
 
-    public function RecupererUserByEmail($email) {
+function RecupererUserByEmail($email) {
         $sql = "SELECT * FROM client WHERE email = :email LIMIT 1";
         $db = Connexion::getConnexion();
         try {

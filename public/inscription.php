@@ -1,18 +1,12 @@
 <?php
+// Inclusion des chemins d'accès en premier
+require_once __DIR__ . '/../app/config/paths.php';
 
-
-
-// Inclusion de la navbar
+// Ensuite, inclusion des autres fichiers
+require_once BASE_PATH . '/app/controllers/UserC.php';
+require_once BASE_PATH . '/app/models/User.php';
 include BASE_PATH . '/app/views/template/navbar.php';
-?>
-<?php
-require_once __DIR__ . '/../app/controllers/UserC.php';
-require_once __DIR__ . '/../app/models/User.php';
 
-require __DIR__ . '/../app/config/paths.php';
-// echo 'BASE_PATH: ' . BASE_PATH . '<br>';
-// echo 'BASE_URL: ' . BASE_URL . '<br>';
-// echo 'Chemin navbar: ' . BASE_PATH . '/app/views/template/navbar.php';
 
 
 $UserC = new UserC();

@@ -90,7 +90,7 @@ class CategorieController
     }
 }
 /////////////////////////////////get nom par id ///////////////////////////////
-public function getNomCategorieParId($idCat) {
+function getNomCategorieParId($idCat) {
     require_once __DIR__ . '/../config/database.php'; // Connexion DB
     $sql = "SELECT name FROM categorie WHERE id = ?";
     $stmt = $pdo->prepare($sql);

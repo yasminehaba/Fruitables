@@ -6,14 +6,24 @@ require_once __DIR__ . '/../models/Categorie.php';
 
 
         /////..............................Afficher............................../////
+                // function AfficherArticle(){
+                //     $sql="SELECT * FROM Article";
+                //     $db = config::getConnexion();
+                //     try{
+                //         $liste = $db->query($sql);
+                //         return $liste;
+                //     }
+                //     catch(Exception $e){
+                //         die('Erreur:'. $e->getMessage());
+                //     }
+                // }
                 function AfficherArticle(){
-                    $sql="SELECT * FROM Article";
+                    $sql="SELECT * FROM article";
                     $db = config::getConnexion();
-                    try{
+                    try {
                         $liste = $db->query($sql);
-                        return $liste;
-                    }
-                    catch(Exception $e){
+                        return $liste->fetchAll(); // <-- très important
+                    } catch(Exception $e){
                         die('Erreur:'. $e->getMessage());
                     }
                 }
@@ -98,6 +108,19 @@ require_once __DIR__ . '/../models/Categorie.php';
                 echo $e->getMessage(); // Afficher l'erreur PDO
             }
         }
-            }
-
+            
+/////////////////////////////getArticleById///////////////////////////////////////////////
+public function getArticleById($id) {
+    $sql = "SELECT * FROM Article WHERE id = :id";
+    $db = config::getConnexion();
+    try {
+        $query = $db->prepare($sql);
+        $query->bindParam(':id', $id, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        die('Erreur: ' . $e->getMessage());
+    }
+}
+}
          

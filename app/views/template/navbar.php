@@ -66,21 +66,21 @@ $_SESSION['role'] = 'admin'; // à retirer ou adapter selon ton système d’aut
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
                             <a href="index.html" class="nav-item nav-link active">Home</a>
-                            <a href="shop.html" class="nav-item nav-link">Shop</a>
-                            <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
+                            <a href="/cakeShop/app/views/template/assets/shop.html" class="nav-item nav-link">Shop</a>
+                            <a href="/cakeShop/app/views/template/assets/shop-detail.html" class="nav-item nav-link">Shop Detail</a>
                             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') : ?>
         <a href="/cakeShop/dashboard.php" class="nav-item nav-link">Dashboard</a>
     <?php endif; ?>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a href="cart.html" class="dropdown-item">Cart</a>
-                                    <a href="chackout.html" class="dropdown-item">Chackout</a>
-                                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                    <a href="404.html" class="dropdown-item">404 Page</a>
+                                    <a href="/cakeShop/app/views/template/assets/cart.html" class="dropdown-item">Cart</a>
+                                    <a href="/cakeShop/app/views/template/assets/chackout.html" class="dropdown-item">Chackout</a>
+                                    <a href="/cakeShop/app/views/template/assets/testimonial.html" class="dropdown-item">Testimonial</a>
+                                    <a href="/cakeShop/app/views/template/assets/404.html" class="dropdown-item">404 Page</a>
                                 </div>
                             </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a href="/cakeShop/app/views/template/assets/contact.html" class="nav-item nav-link">Contact</a>
                             
                         </div>
                         <div class="d-flex m-3 me-0">

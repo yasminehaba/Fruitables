@@ -1,8 +1,6 @@
 <?php
 include     (__DIR__ . '/../template/navbar.php'); 
-// Enable error reporting at the VERY TOP
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
 
 // Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {

@@ -13,7 +13,6 @@ $CategorieController = new CategorieController(); // Nouvelle instance
 $categories = $CategorieController->AfficherCategorie(); // Récupération des catégories
 $articles = $ArticleController->AfficherArticle();
 
-// Traitement de l'ajout
 if (
     isset($_POST["idCat"], $_POST["nom"], $_POST["image"], $_POST["description"], $_POST["prix"], $_POST["nbStock"], $_POST["status"])
 ) {
