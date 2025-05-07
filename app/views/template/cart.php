@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Mettre à jour le panier dans la session
         $_SESSION['cart'] = $cart;
-
+       
         // Rediriger vers la page du panier pour afficher les modifications
         header("Location: cart.php");
         exit;
