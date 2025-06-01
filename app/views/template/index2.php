@@ -118,15 +118,15 @@ foreach ($categories as $categorie) {
                                         <p><?= htmlspecialchars($article['description']) ?></p>
                                         <div class="d-flex justify-content-between flex-lg-wrap align-items-center">
                                             <p class="text-dark fs-5 fw-bold mb-0"><?= htmlspecialchars($article['prix']) ?> TND</p>
-                                            <form action="add_to_cart.php" method="post">
-                                                <input type="hidden" name="id" value="<?= htmlspecialchars($article['id']) ?>">
-                                                <input type="hidden" name="nom" value="<?= htmlspecialchars($article['nom']) ?>">
-                                                <input type="hidden" name="prix" value="<?= htmlspecialchars($article['prix']) ?>">
-                                                <input type="hidden" name="image" value="<?= htmlspecialchars($article['image']) ?>">
-                                                <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Ajouter au panier
-                                                </button>
-                                            </form>
+                                           <form class="add-to-cart">
+    <input type="hidden" name="id" value="<?= htmlspecialchars($article['id']) ?>">
+    <input type="hidden" name="nom" value="<?= htmlspecialchars($article['nom']) ?>">
+    <input type="hidden" name="prix" value="<?= htmlspecialchars($article['prix']) ?>">
+    <input type="hidden" name="image" value="<?= htmlspecialchars($article['image']) ?>">
+    <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+        <i class="fa fa-shopping-bag me-2 text-primary"></i> Ajouter au panier
+    </button>
+</form>
                                         </div>
                                     </div>
                                 </div>
@@ -684,3 +684,27 @@ foreach ($categories as $categorie) {
 <?php
 include "footer.php"
 ?>
+<script>
+document.querySelectorAll('.add-to-cart').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Empêche l'envoi normal
+
+        const formData = new FormData(form);
+
+        fetch('add_to_cart.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                // Met à jour le badge dans la navbar
+                document.getElementById('cart-count').innerText = data.cartCount;
+            } else {
+                alert('Erreur lors de l\'ajout au panier');
+            }
+        })
+        .catch(() => alert('Erreur de communication avec le serveur.'));
+    });
+});
+</script>

@@ -3,6 +3,16 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+?>
+<?php
+
+$cartCount = 0;
+if (!empty($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $item) {
+        $cartCount += $item['qte'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,13 +96,13 @@ if (session_status() === PHP_SESSION_NONE) {
                             <i class="fas fa-search text-primary"></i>
                         </button>
                         <a href="cart.php" class="position-relative me-4 my-auto">
-                            <i class="fa fa-shopping-bag fa-2x"></i>
-                            <?php if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) : ?>
-                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">
-                                    <?= count($_SESSION['cart']) ?>
-                                </span>
-                            <?php endif; ?>
-                        </a>
+                            <a href="cart.php" class="position-relative me-4 my-auto">
+    <i class="fa fa-shopping-bag fa-2x"></i>
+    <span id="cart-count" class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+          style="top: -5px; left: 15px; height: 20px; min-width: 20px;">
+        <?= $cartCount ?>
+    </span>
+</a>
                         <?php if (isset($_SESSION['user'])) : ?>
                             <div class="dropdown my-auto">
                                 <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
