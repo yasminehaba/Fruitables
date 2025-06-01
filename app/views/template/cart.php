@@ -1,46 +1,41 @@
 <?php
-include "navbar.php";
 session_start();
 
-// Initialiser ou récupérer le panier
+// Récupérer le panier depuis la session
 $cart = $_SESSION['cart'] ?? [];
 
-// Gestion des actions
+// Gérer les actions sur le panier (ajout, suppression, etc.)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'], $_POST['product_id'])) {
         $id = (int)$_POST['product_id'];
 
-        // Vérifier si l'article existe dans le panier
         if (isset($cart[$id])) {
-            // Gérer l'action (incrémenter, décrémenter, retirer)
             switch ($_POST['action']) {
                 case 'increment':
-                    $cart[$id]['qte'] += 1; // Augmenter la quantité
+                    $cart[$id]['qte'] += 1;
                     break;
                 case 'decrement':
-                    // Décrémenter la quantité sans descendre sous 1
                     $cart[$id]['qte'] = max(1, $cart[$id]['qte'] - 1);
                     break;
                 case 'remove':
-                    unset($cart[$id]); // Supprimer l'article
+                    unset($cart[$id]);
                     break;
             }
 
-            // Recalculer le total du produit après modification
             if (isset($cart[$id])) {
                 $cart[$id]['ttPrix'] = $cart[$id]['qte'] * $cart[$id]['prix'];
             }
+
+            $_SESSION['cart'] = $cart;
         }
 
-        // Mettre à jour le panier dans la session
-        $_SESSION['cart'] = $cart;
-       
-        // Rediriger vers la page du panier pour afficher les modifications
         header("Location: cart.php");
         exit;
     }
 }
 ?>
+
+<?php include "navbar.php"; ?>
 
 <!-- Page Header -->
 <div class="container-fluid page-header py-5">
@@ -72,30 +67,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </thead>
                 <tbody>
                 <?php foreach ($cart as $id => $item): ?>
-                    <?php if (!isset($item['nom'], $item['prix'], $item['qte'], $item['ttPrix'])) continue; ?>
                     <tr>
-                        <td><p class="mb-0 mt-4"><?= htmlspecialchars($item['img'] ?? 'Image inconnue') ?></p></td>
-                        <td><p class="mb-0 mt-4"><?= htmlspecialchars($item['nom']) ?></p></td>
-                        <td><p class="mb-0 mt-4"><?= htmlspecialchars($item['prix']) ?> TND</p></td>
                         <td>
-                            <form method="post" class="d-flex mt-4" style="width: 150px;">
-                                <input type="hidden" name="product_id" value="<?= (int)$id ?>">
-                                <div class="input-group quantity">
-                                    <button type="submit" name="action" value="decrement" class="btn btn-sm btn-minus rounded-circle bg-light border">
+                            <?php if (!empty($item['img'])): ?>
+                                <img src="<?= htmlspecialchars($item['img']) ?>" alt="<?= htmlspecialchars($item['nom']) ?>" style="width: 80px; height: auto;" class="img-thumbnail">
+                            <?php else: ?>
+                                <span>Image non disponible</span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="align-middle"><?= htmlspecialchars($item['nom']) ?></td>
+                        <td class="align-middle"><?= number_format($item['prix'], 2) ?> TND</td>
+                        <td class="align-middle">
+                            <div class="d-flex" style="width: 150px;">
+                                <form method="post" style="margin: 0 2px;">
+                                    <input type="hidden" name="product_id" value="<?= $id ?>">
+                                    <input type="hidden" name="action" value="decrement">
+                                    <button type="submit" class="btn btn-sm btn-minus rounded-circle bg-light border">
                                         <i class="fa fa-minus"></i>
                                     </button>
-                                    <input type="text" class="form-control form-control-sm text-center border-0" value="<?= $item['qte'] ?>" readonly>
-                                    <button type="submit" name="action" value="increment" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                </form>
+
+                                <input type="text" class="form-control form-control-sm text-center border-0" value="<?= $item['qte'] ?>" readonly>
+
+                                <form method="post" style="margin: 0 2px;">
+                                    <input type="hidden" name="product_id" value="<?= $id ?>">
+                                    <input type="hidden" name="action" value="increment">
+                                    <button type="submit" class="btn btn-sm btn-plus rounded-circle bg-light border">
                                         <i class="fa fa-plus"></i>
                                     </button>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </td>
-                        <td><p class="mb-0 mt-4"><?= number_format($item['ttPrix'], 2) ?> TND</p></td>
-                        <td>
-                            <form method="post" class="mt-4">
-                                <input type="hidden" name="product_id" value="<?= (int)$id ?>">
-                                <button type="submit" name="action" value="remove" class="btn btn-md rounded-circle bg-light border">
+                        <td class="align-middle"><?= number_format($item['ttPrix'], 2) ?> TND</td>
+                        <td class="align-middle">
+                            <form method="post">
+                                <input type="hidden" name="product_id" value="<?= $id ?>">
+                                <input type="hidden" name="action" value="remove">
+                                <button type="submit" class="btn btn-md rounded-circle bg-light border">
                                     <i class="fa fa-times text-danger"></i>
                                 </button>
                             </form>
