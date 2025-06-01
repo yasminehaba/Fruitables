@@ -6,17 +6,6 @@ require_once __DIR__ . '/../models/Categorie.php';
 
 
         /////..............................Afficher............................../////
-                // function AfficherArticle(){
-                //     $sql="SELECT * FROM Article";
-                //     $db = config::getConnexion();
-                //     try{
-                //         $liste = $db->query($sql);
-                //         return $liste;
-                //     }
-                //     catch(Exception $e){
-                //         die('Erreur:'. $e->getMessage());
-                //     }
-                // }
                 function AfficherArticle(){
                     $sql="SELECT * FROM article";
                     $db = Config::getConnexion();
