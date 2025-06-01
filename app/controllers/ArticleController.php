@@ -19,7 +19,7 @@ require_once __DIR__ . '/../models/Categorie.php';
                 // }
                 function AfficherArticle(){
                     $sql="SELECT * FROM article";
-                    $db = config::getConnexion();
+                    $db = Config::getConnexion();
                     try {
                         $liste = $db->query($sql);
                         return $liste->fetchAll(); // <-- très important
@@ -31,7 +31,7 @@ require_once __DIR__ . '/../models/Categorie.php';
         /////..............................Supprimer............................../////
                 function SupprimerArticle($idArticle){
                     $sql="DELETE FROM Article WHERE id=:idArticle";
-                    $db = config::getConnexion();
+                    $db = Config::getConnexion();
                     $req=$db->prepare($sql);
                     $req->bindValue(':idArticle', $idArticle);   
                     try{
@@ -43,37 +43,34 @@ require_once __DIR__ . '/../models/Categorie.php';
                 }
         
         /////..............................Ajouter............................../////
-                function AjouterArticle($Article){
-                    $sql="INSERT INTO Article (id ,idCat,nom,image ,description,prix,nbStock, status)
-                    VALUES (:id ,:idCat,:nom,:image, :description, :prix , :nbStock, :status)";
-                    
-                    $db = config::getConnexion();
-                    try{
-                        $query = $db->prepare($sql);
-                        $query->execute([
-                            'id' => $Article->getId(),
-                            'idCat' => $Article->getIdCat(),
-                            'nom' => $Article->getNom(),
-                            'image' => $Article->getImage(),
-                            'description' =>$Article->getDescription(),
-                            'prix' => $Article->getPrix(),
-                            'nbStock' => $Article->getNbStock(),
-                            'status' => $Article->getStatus(),
-
-
-
-
-                    ]);
-                                
-                    }
-                    catch (Exception $e){
-                        echo 'Erreur: '.$e->getMessage();
-                    }			
-                }
+function AjouterArticle($Article) {
+    $sql = "INSERT INTO Article (idCat, nom, image, description, prix, nbStock, status)
+            VALUES (:idCat, :nom, :image, :description, :prix, :nbStock, :status)";
+    
+    $db = Config::getConnexion();
+    try {
+        $query = $db->prepare($sql);
+        $success = $query->execute([
+            'idCat' => $Article->getIdCat(),
+            'nom' => $Article->getNom(),
+            'image' => $Article->getImage(),
+            'description' => $Article->getDescription(),
+            'prix' => $Article->getPrix(),
+            'nbStock' => $Article->getNbStock(),
+            'status' => $Article->getStatus()
+        ]);
+        
+        // Return true on success, false on failure
+        return $success;
+    } catch (PDOException $e) {
+        error_log('Database Error: ' . $e->getMessage());
+        return false;
+    }
+}
         /////..............................Affichage par prix............................../////
                 function RecupererArticle($prixA){
                     $sql="SELECT * from Article where prix=$prixA";
-                    $db = config::getConnexion();
+                    $db = Config::getConnexion();
                     try{
                         $query=$db->prepare($sql);
                         $query->execute();
@@ -90,7 +87,7 @@ require_once __DIR__ . '/../models/Categorie.php';
         /////..............................Update............................../////
         function modifierArticle($Article, $id){
             try {
-                $db = config::getConnexion();
+                $db = Config::getConnexion();
                 $query = $db->prepare('UPDATE Article SET  id = :id ,idCat=:idCat,nom=:nom,image=:image, description=:description, prix=:prix ,nbStock= :nbStock,status= :status WHERE id=:id');
                 $query->execute([
                     'id' => $Article->getId(),
@@ -112,7 +109,7 @@ require_once __DIR__ . '/../models/Categorie.php';
 /////////////////////////////getArticleById///////////////////////////////////////////////
 public function getArticleById($id) {
     $sql = "SELECT * FROM Article WHERE id = :id";
-    $db = config::getConnexion();
+    $db = Config::getConnexion();
     try {
         $query = $db->prepare($sql);
         $query->bindParam(':id', $id, PDO::PARAM_INT);

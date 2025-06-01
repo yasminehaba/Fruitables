@@ -21,7 +21,7 @@ if (isset($_POST['modifier'])) {
         $_POST['id'],
         $_POST['idCat'],
         $_POST['nom'],
-        '', // image (non modifiée ici)
+        $_POST['image'] ?? '', // Keep existing image if not modified
         $_POST['description'],
         $_POST['prix'],
         $_POST['nbStock'],
@@ -64,7 +64,16 @@ $articles = $articleController->AfficherArticle();
                 <td><?= htmlspecialchars($article['id']) ?></td>
                 <td><?= htmlspecialchars($article['idCat']) ?></td>
                 <td><?= htmlspecialchars($article['nom']) ?></td>
-                <td>Image non disponible</td>
+                <td>
+                    <?php if (!empty($article['image'])): ?>
+                        <img src="<?= htmlspecialchars($article['image']) ?>" 
+                             alt="<?= htmlspecialchars($article['nom']) ?>" 
+                             style="max-width: 100px; max-height: 100px;"
+                             class="img-thumbnail">
+                    <?php else: ?>
+                        Image non disponible
+                    <?php endif; ?>
+                </td>
                 <td><?= htmlspecialchars($article['description']) ?></td>
                 <td><?= htmlspecialchars($article['prix']) ?> TND</td>
                 <td><?= htmlspecialchars($article['nbStock']) ?></td>
@@ -86,6 +95,7 @@ $articles = $articleController->AfficherArticle();
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" value="<?= $article['id'] ?>">
+                        <input type="hidden" name="image" value="<?= $article['image'] ?>">
                         <div class="mb-3">
                             <label>Catégorie</label>
                             <input type="text" class="form-control" name="idCat" value="<?= $article['idCat'] ?>">
