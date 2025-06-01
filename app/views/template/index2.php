@@ -1,4 +1,10 @@
 <?php
+
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('Location: ../public/login.php');
+    exit();
+}
 include "navbar.php";
 require_once '../../controllers/ArticleController.php';
 
@@ -100,9 +106,9 @@ foreach ($categories as $categorie) {
                             <div class="col-md-6 col-lg-4 col-xl-3">
                                 <div class="rounded position-relative fruite-item">
                                     <div class="fruite-img">
-                <img src="<?= htmlspecialchars($article['image']) ?>" 
-                     alt="<?= htmlspecialchars($article['nom']) ?>" 
-                     class="img-fluid w-100 rounded-top">
+                <img src="/cakeshop/Fruitables/app/uploads/<?= htmlspecialchars(basename($article['image'])) ?>" 
+     alt="<?= htmlspecialchars($article['nom']) ?>" 
+     class="img-fluid w-100 rounded-top">
             </div>
                                     <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
                                         <?= htmlspecialchars($categoriesMap[$article['idCat']] ?? 'Catégorie inconnue') ?>

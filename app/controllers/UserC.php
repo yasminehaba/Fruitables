@@ -33,15 +33,59 @@ public function AjouterUser($user) {
 
 
 
-public function RecupererUserByEmail($email) {  // Make sure it's exactly this capitalization
-    $sql = "SELECT * FROM user WHERE email = :email LIMIT 1";
+    public function RecupererUserByEmail($email) {  // Make sure it's exactly this capitalization
+        $sql = "SELECT * FROM user WHERE email = :email LIMIT 1";
+        $db = Config::getConnexion();
+        try {
+            $query = $db->prepare($sql);
+            $query->execute(['email' => filter_var($email, FILTER_SANITIZE_EMAIL)]);
+            return $query->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Error RecupererUserByEmail: '.$e->getMessage());
+            return false;
+        }
+    }
+public function loginUser($username, $password) {
+    $db = Config::getConnexion();
+    try {
+        $sql = "SELECT * FROM user WHERE username = :username OR email = :email LIMIT 1";
+        $query = $db->prepare($sql);
+        $query->execute([
+            'username' => $username,
+            'email' => $username
+        ]);
+        $user = $query->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            error_log("User not found: " . $username);
+            return false;
+        }
+
+        // Debug output
+        error_log("Stored hash: " . $user['pwd']);
+        error_log("Input password: " . $password);
+        error_log("Verification result: " . password_verify($password, $user['pwd']));
+
+        if (password_verify($password, $user['pwd'])) {
+            unset($user['pwd']);
+            return $user;
+        }
+        
+        return false;
+    } catch (PDOException $e) {
+        error_log('Login error: '.$e->getMessage());
+        return false;
+    }
+}
+public function RecupererUserByUsername($username) {
+    $sql = "SELECT * FROM user WHERE username = :username LIMIT 1";
     $db = Config::getConnexion();
     try {
         $query = $db->prepare($sql);
-        $query->execute(['email' => filter_var($email, FILTER_SANITIZE_EMAIL)]);
+        $query->execute(['username' => $username]);
         return $query->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-        error_log('Error RecupererUserByEmail: '.$e->getMessage());
+        error_log('Error RecupererUserByUsername: '.$e->getMessage());
         return false;
     }
 }

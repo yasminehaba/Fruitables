@@ -1,13 +1,9 @@
-<?php 
-// Enable error reporting for debugging
+<?php
+// Enable error reporting and start session at the VERY TOP
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include __DIR__ . '../../template/navbar.php'; 
-?>
-<br><br><br><br><br><br><br><br>
-
-<?php
+// Process form data before any output
 require_once __DIR__ . '/../../controllers/ArticleController.php';
 require_once __DIR__ . '/../../models/Article.php';
 require_once __DIR__ . '/../../controllers/CategorieController.php';
@@ -15,23 +11,28 @@ require_once __DIR__ . '/../../controllers/CategorieController.php';
 $ArticleController = new ArticleController();
 $CategorieController = new CategorieController();
 $categories = $CategorieController->AfficherCategorie();
-$articles = $ArticleController->AfficherArticle();
 
 // Image upload handling
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate all fields are set
-    if (
-        isset($_POST["idCat"], $_POST["nom"], $_POST["description"], 
-              $_POST["prix"], $_POST["nbStock"], $_POST["status"]) &&
-        isset($_FILES["image"])
-    ) {
+    if (isset(
+        $_POST["idCat"],
+        $_POST["nom"],
+        $_POST["description"],
+        $_POST["prix"],
+        $_POST["nbStock"],
+        $_POST["status"]
+    ) && isset($_FILES["image"])) {
+        
         // Check for empty fields
-        if (
-            !empty($_POST["idCat"]) && !empty($_POST["nom"]) && 
-            !empty($_FILES["image"]["name"]) && !empty($_POST["description"]) && 
-            !empty($_POST["prix"]) && !empty($_POST["nbStock"]) && 
-            !empty($_POST["status"])
-        ) {
+        if (!empty($_POST["idCat"]) && 
+            !empty($_POST["nom"]) && 
+            !empty($_FILES["image"]["name"]) && 
+            !empty($_POST["description"]) && 
+            !empty($_POST["prix"]) && 
+            !empty($_POST["nbStock"]) && 
+            !empty($_POST["status"])) {
+            
             // Handle image upload
             $uploadDir = __DIR__ . '/../../uploads/';
             
@@ -46,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Validate image
             if (!in_array($image['type'], $allowedTypes)) {
-                echo "<div class='alert alert-danger text-center'>Seuls les fichiers JPG, PNG, GIF et WEBP sont autorisés.</div>";
+                $_SESSION['error'] = "Seuls les fichiers JPG, PNG, GIF et WEBP sont autorisés.";
             } elseif ($image['size'] > $maxSize) {
-                echo "<div class='alert alert-danger text-center'>La taille du fichier ne doit pas dépasser 5MB.</div>";
+                $_SESSION['error'] = "La taille du fichier ne doit pas dépasser 5MB.";
             } else {
                 // Generate unique filename
                 $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
@@ -70,35 +71,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         $result = $ArticleController->AjouterArticle($article);
                         if ($result) {
-                            echo "<div class='alert alert-success text-center'>Article ajouté avec succès!</div>";
-                            // Clear the form after successful submission
-                            echo "<script>document.querySelector('form').reset();</script>";
+                            $_SESSION['success'] = "Article ajouté avec succès!";
+                            header("Location: articles.php");
+                            exit();
                         } else {
                             // Delete the uploaded image if database insert failed
                             unlink($destination);
-                            echo "<div class='alert alert-danger text-center'>Erreur lors de l'ajout dans la base de données.</div>";
+                            $_SESSION['error'] = "Erreur lors de l'ajout dans la base de données.";
                         }
                     } catch (Exception $e) {
                         // Delete the uploaded image if an exception occurred
                         if (file_exists($destination)) {
                             unlink($destination);
                         }
-                        echo "<div class='alert alert-danger text-center'>Erreur: " . htmlspecialchars($e->getMessage()) . "</div>";
+                        $_SESSION['error'] = "Erreur: " . $e->getMessage();
                     }
                 } else {
-                    echo "<div class='alert alert-danger text-center'>Erreur lors du téléchargement de l'image.</div>";
+                    $_SESSION['error'] = "Erreur lors du téléchargement de l'image.";
                 }
             }
         } else {
-            echo "<div class='alert alert-danger text-center'>Tous les champs sont obligatoires.</div>";
+            $_SESSION['error'] = "Tous les champs sont obligatoires.";
         }
     } else {
-        echo "<div class='alert alert-danger text-center'>Tous les champs doivent être remplis.</div>";
+        $_SESSION['error'] = "Tous les champs doivent être remplis.";
     }
 }
+
+// Now include the header and display the form
+include __DIR__ . '../../template/navbar.php';
 ?>
 
 <div class="container">
+    <br><br><br><br><br><br><br><br>
+    
+    <!-- Display success/error messages -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success text-center"><?= $_SESSION['success'] ?></div>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+    
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger text-center"><?= $_SESSION['error'] ?></div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+
     <h2 class="my-4">Ajouter un nouvel article</h2>
     
     <form method="POST" enctype="multipart/form-data" class="mb-5">
