@@ -1,10 +1,9 @@
 <?php
-// MUST be the VERY FIRST LINE with no whitespace before
 session_start();
+
 require_once __DIR__ . '/../app/config/paths.php';
 require_once BASE_PATH . '/app/controllers/UserC.php';
 
-// Process login BEFORE any output
 $error = '';
 $userC = new UserC();
 
@@ -18,12 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user'] = $user;
         $_SESSION['loggedin'] = true;
         $_SESSION['role'] = $user['role'];
-        
-        // Redirect and exit IMMEDIATELY
+
+        // Redirection selon le rôle
         if ($user['role'] === 'Admin') {
-            header('Location: ../app/views/Dashboard');
+            header('Location: ../app/views/Dashboard/index.php');
         } else {
-            // Direct path to index2.php in the template directory
             header('Location: ../app/views/template/index2.php');
         }
         exit();
@@ -32,11 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// NOW include navbar after all header operations are done
 include BASE_PATH . '/app/views/template/navbar.php';
 ?>
-
-
 
 <div class="container-fluid py-5">
     <div class="container py-5">
@@ -75,7 +70,5 @@ include BASE_PATH . '/app/views/template/navbar.php';
         </form>
     </div>
 </div>
-<?php
-require_once __DIR__ . '/../app/views/template/footer.php';
-?>
 
+<?php require_once __DIR__ . '/../app/views/template/footer.php'; ?>
