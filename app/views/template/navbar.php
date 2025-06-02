@@ -87,7 +87,7 @@ if (!empty($_SESSION['cart'])) {
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
                     <a href="cart.php" class="dropdown-item">Cart</a>
-                    <a href="checkout.php" class="dropdown-item">Checkout</a>
+                   <a href="public/logout.php" class="dropdown-item">Logout</a>
                     <?php if (isset($_SESSION['user'])) : ?>
                         <a href="orders.php" class="dropdown-item">My Orders</a>
                     <?php endif; ?>

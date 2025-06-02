@@ -14,8 +14,7 @@ require_once '../../controllers/CategorieController.php';
 
 $ArticleController = new ArticleController();
 $CategorieController = new CategorieController(); 
-
-$categories = $CategorieController->AfficherCategorie(); 
+$fruits = $ArticleController->getArticlesByCategoryName('Fruits');$categories = $CategorieController->AfficherCategorie(); 
 
 $articles = $articleController->AfficherArticle(); 
 $categoriesMap = [];
@@ -71,45 +70,33 @@ foreach ($categories as $categorie) {
                 <div class="col-lg-8 text-end">
                     <ul class="nav nav-pills d-inline-flex text-center mb-5">
                         <li class="nav-item">
-                            <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-1">
+                            <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-all">
                                 <span class="text-dark" style="width: 130px;">All Products</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="d-flex py-2 m-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-2">
-                                <span class="text-dark" style="width: 130px;">Vegetables</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-3">
-                                <span class="text-dark" style="width: 130px;">Fruits</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-4">
-                                <span class="text-dark" style="width: 130px;">Bread</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-5">
-                                <span class="text-dark" style="width: 130px;">Meat</span>
-                            </a>
-                        </li>
+                        <?php foreach ($categories as $cat): ?>
+                            <li class="nav-item">
+                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-<?= $cat['id'] ?>">
+                                    <span class="text-dark" style="width: 130px;"><?= htmlspecialchars($cat['name']) ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
             </div>
 
             <div class="tab-content">
-                <div id="tab-1" class="tab-pane fade show p-0 active">
+                <!-- Onglet All Products -->
+                <div id="tab-all" class="tab-pane fade show p-0 active">
                     <div class="row g-4">
                         <?php foreach ($articles as $article): ?>
                             <div class="col-md-6 col-lg-4 col-xl-3">
                                 <div class="rounded position-relative fruite-item">
                                     <div class="fruite-img">
-                <img src="/cakeshop/Fruitables/app/uploads/<?= htmlspecialchars(basename($article['image'])) ?>" 
-     alt="<?= htmlspecialchars($article['nom']) ?>" 
-     class="img-fluid w-100 rounded-top">
-            </div>
+                                        <img src="/cakeshop/Fruitables/app/uploads/<?= htmlspecialchars(basename($article['image'])) ?>"
+                                             alt="<?= htmlspecialchars($article['nom']) ?>"
+                                             class="img-fluid w-100 rounded-top">
+                                    </div>
                                     <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
                                         <?= htmlspecialchars($categoriesMap[$article['idCat']] ?? 'Catégorie inconnue') ?>
                                     </div>
@@ -118,15 +105,15 @@ foreach ($categories as $categorie) {
                                         <p><?= htmlspecialchars($article['description']) ?></p>
                                         <div class="d-flex justify-content-between flex-lg-wrap align-items-center">
                                             <p class="text-dark fs-5 fw-bold mb-0"><?= htmlspecialchars($article['prix']) ?> TND</p>
-                                           <form class="add-to-cart">
-    <input type="hidden" name="id" value="<?= htmlspecialchars($article['id']) ?>">
-    <input type="hidden" name="nom" value="<?= htmlspecialchars($article['nom']) ?>">
-    <input type="hidden" name="prix" value="<?= htmlspecialchars($article['prix']) ?>">
-    <input type="hidden" name="image" value="<?= htmlspecialchars($article['image']) ?>">
-    <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-        <i class="fa fa-shopping-bag me-2 text-primary"></i> Ajouter au panier
-    </button>
-</form>
+                                            <form class="add-to-cart">
+                                                <input type="hidden" name="id" value="<?= htmlspecialchars($article['id']) ?>">
+                                                <input type="hidden" name="nom" value="<?= htmlspecialchars($article['nom']) ?>">
+                                                <input type="hidden" name="prix" value="<?= htmlspecialchars($article['prix']) ?>">
+                                                <input type="hidden" name="image" value="<?= htmlspecialchars($article['image']) ?>">
+                                                <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Ajouter au panier
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -134,6 +121,46 @@ foreach ($categories as $categorie) {
                         <?php endforeach; ?>
                     </div>
                 </div>
+
+                <!-- Onglets par catégorie -->
+                <?php foreach ($categories as $cat): ?>
+                    <div id="tab-<?= $cat['id'] ?>" class="tab-pane fade p-0">
+                        <div class="row g-4">
+                            <?php foreach ($articles as $article): ?>
+                                <?php if ($article['idCat'] == $cat['id']): ?>
+                                    <div class="col-md-6 col-lg-4 col-xl-3">
+                                        <div class="rounded position-relative fruite-item">
+                                            <div class="fruite-img">
+                                                <img src="/cakeshop/Fruitables/app/uploads/<?= htmlspecialchars(basename($article['image'])) ?>"
+                                                     alt="<?= htmlspecialchars($article['nom']) ?>"
+                                                     class="img-fluid w-100 rounded-top">
+                                            </div>
+                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
+                                                <?= htmlspecialchars($categoriesMap[$article['idCat']] ?? 'Catégorie inconnue') ?>
+                                            </div>
+                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                                <h4><?= htmlspecialchars($article['nom']) ?></h4>
+                                                <p><?= htmlspecialchars($article['description']) ?></p>
+                                                <div class="d-flex justify-content-between flex-lg-wrap align-items-center">
+                                                    <p class="text-dark fs-5 fw-bold mb-0"><?= htmlspecialchars($article['prix']) ?> TND</p>
+                                                    <form class="add-to-cart">
+                                                        <input type="hidden" name="id" value="<?= htmlspecialchars($article['id']) ?>">
+                                                        <input type="hidden" name="nom" value="<?= htmlspecialchars($article['nom']) ?>">
+                                                        <input type="hidden" name="prix" value="<?= htmlspecialchars($article['prix']) ?>">
+                                                        <input type="hidden" name="image" value="<?= htmlspecialchars($article['image']) ?>">
+                                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Ajouter au panier
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
@@ -194,125 +221,45 @@ foreach ($categories as $categorie) {
 
 
         <!-- Vesitable Shop Start-->
-        <div class="container-fluid vesitable py-5">
-            <div class="container py-5">
-                <h1 class="mb-0">Fresh Organic Vegetables</h1>
-                <div class="owl-carousel vegetable-carousel justify-content-center">
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="assets/img/vegetable-item-6.jpg" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>Parsely</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold mb-0">$4.99 / kg</p>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
+        <!-- Fruit Shop Start -->
+<div class="container-fluid vesitable py-5">
+    <div class="container py-5">
+        <h1 class="mb-0">Fresh Organic Fruits</h1>
+        <div class="owl-carousel vegetable-carousel justify-content-center">
+            <?php foreach ($fruits as $fruit): ?>
+                <div class="border border-primary rounded position-relative vesitable-item">
+                    <div class="vesitable-img">
+                        <img src="/cakeshop/Fruitables/app/uploads/<?= htmlspecialchars(basename($fruit['image'])) ?>"
+                             class="img-fluid w-100 rounded-top"
+                             alt="<?= htmlspecialchars($fruit['nom']) ?>">
                     </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="assets/img/vegetable-item-1.jpg" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>Parsely</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold mb-0">$4.99 / kg</p>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
+                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                         style="top: 10px; right: 10px;">
+                        Fruit
                     </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="assets/img/vegetable-item-3.png" class="img-fluid w-100 rounded-top bg-light" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>Banana</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="assets/img/vegetable-item-4.jpg" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>Bell Papper</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="assets/img/vegetable-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>Potatoes</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="assets/img/vegetable-item-6.jpg" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>Parsely</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="assets/img/vegetable-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>Potatoes</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="assets/img/vegetable-item-6.jpg" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>Parsely</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
+                    <div class="p-4 rounded-bottom">
+                        <h4><?= htmlspecialchars($fruit['nom']) ?></h4>
+                        <p><?= htmlspecialchars($fruit['description']) ?></p>
+                        <div class="d-flex justify-content-between flex-lg-wrap">
+                            <p class="text-dark fs-5 fw-bold mb-0"><?= htmlspecialchars($fruit['prix']) ?> TND / kg</p>
+                            <form class="add-to-cart">
+                                <input type="hidden" name="id" value="<?= htmlspecialchars($fruit['id']) ?>">
+                                <input type="hidden" name="nom" value="<?= htmlspecialchars($fruit['nom']) ?>">
+                                <input type="hidden" name="prix" value="<?= htmlspecialchars($fruit['prix']) ?>">
+                                <input type="hidden" name="image" value="<?= htmlspecialchars($fruit['image']) ?>">
+                                <button type="submit"
+                                        class="btn border border-secondary rounded-pill px-3 text-primary">
+                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
+    </div>
+</div>
+<!-- Fruit Shop End -->
         <!-- Vesitable Shop End -->
 
 

@@ -108,5 +108,22 @@ public function getArticleById($id) {
         die('Erreur: ' . $e->getMessage());
     }
 }
+
+public function getArticlesByCategoryName($categoryName) {
+    try {
+        $db = Config::getConnexion(); // Correction ici
+        $stmt = $db->prepare("
+            SELECT a.* 
+            FROM article a 
+            JOIN categorie c ON a.idCat = c.id 
+            WHERE c.name = ?
+        ");
+        $stmt->execute([$categoryName]);
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        die("Erreur SQL : " . $e->getMessage());
+    }
+}
+
 }
          
