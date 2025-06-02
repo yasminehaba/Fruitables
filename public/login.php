@@ -20,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['role'] = $user['role'];
         
         // Redirect and exit IMMEDIATELY
-        if ($user['role'] === 'admin') {
-            header('Location: ../app/views/Dashboard/index.php');
+        if ($user['role'] === 'Admin') {
+            header('Location: ../app/views/Dashboard');
         } else {
             // Direct path to index2.php in the template directory
             header('Location: ../app/views/template/index2.php');

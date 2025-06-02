@@ -43,10 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Handle delete
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
-    if ($categorieController->SupprimerCategorie($id)) {
-        header("Location: ".$_SERVER['PHP_SELF']);
-        exit;
-    }
+    $categorieController->SupprimerCategorie($id);
 }
 
 // Get categories for display
@@ -82,12 +79,11 @@ $categories = $categorieController->AfficherCategorie();
                                 Edit
                             </button>
                             
-                            <a href="categorie.php?delete=<?php echo $categorie['id']; ?>" 
-                               class="btn btn-md rounded-circle bg-light border mt-4 text-danger"
-                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie?')">
-                                Delete
-                            </a>
-                            
+<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . '?delete=' . $categorie['id']; ?>" 
+   class="btn btn-md rounded-circle bg-light border mt-4 text-danger"
+   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie?')">
+   Delete
+</a>
                             <!-- Modal pour l'édition -->
                             <div class="modal fade" id="editModal<?php echo $categorie['id']; ?>" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">

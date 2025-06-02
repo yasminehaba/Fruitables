@@ -9,7 +9,7 @@ class CartController
     function AfficherCart()
     {
         $sql = "SELECT * FROM Cart";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         try {
             $liste = $db->query($sql);
             return $liste;
@@ -23,7 +23,7 @@ class CartController
     {
         $sql = "INSERT INTO Cart (id_Client, id_Article, qte, ttPrix)
                 VALUES (:id_Client, :id_Article, :qte, :ttPrix)";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute([
@@ -41,7 +41,7 @@ class CartController
     function SupprimerCart($id)
     {
         $sql = "DELETE FROM Cart WHERE id = :id";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         $req = $db->prepare($sql);
         $req->bindValue(':id', $id);
         try {
@@ -56,7 +56,7 @@ class CartController
     {
         $sql = "UPDATE Cart SET id_Client = :id_Client, id_Article = :id_Article, qte = :qte, ttPrix = :ttPrix 
                 WHERE id = :id";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute([
@@ -76,7 +76,7 @@ class CartController
     function RecupererCart($id)
     {
         $sql = "SELECT * FROM Cart WHERE id = :id";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute(['id' => $id]);

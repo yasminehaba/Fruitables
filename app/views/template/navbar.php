@@ -68,29 +68,36 @@ if (!empty($_SESSION['cart'])) {
                     <span class="fa fa-bars text-primary"></span>
                 </button>
                 <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-                    <div class="navbar-nav mx-auto">
-                        <a href="index.php" class="nav-item nav-link">Home</a>
-                        <a href="shop.php" class="nav-item nav-link">Shop</a>
-                        <a href="products.php" class="nav-item nav-link">Products</a>
-                        
-                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin') : ?>
-                            <a href="/../Dashboard/index.php" class="nav-item nav-link">Dashboard</a>
-                        <?php endif; ?>
-                        
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                            <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                <a href="cart.php" class="dropdown-item">Cart</a>
-                                <a href="checkout.php" class="dropdown-item">Checkout</a>
-                                <?php if (isset($_SESSION['user'])) : ?>
-                                    <a href="profile.php" class="dropdown-item">My Profile</a>
-                                    <a href="orders.php" class="dropdown-item">My Orders</a>
-                                <?php endif; ?>
-                                <a href="testimonials.php" class="dropdown-item">Testimonials</a>
-                            </div>
-                        </div>
-                        <a href="contact.php" class="nav-item nav-link">Contact</a>
-                    </div>
+    <div class="navbar-nav mx-auto">
+
+        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'Client') : ?>
+            <a href="index2.php" class="nav-item nav-link">Home</a>
+        <?php else: ?>
+            <a href="../template/index2.php" class="nav-item nav-link">Home</a>
+        <?php endif; ?>
+
+        <a href="products.php" class="nav-item nav-link">Products</a>
+
+        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'Admin') : ?>
+            <a href="../Dashboard/index.php" class="nav-item nav-link">Dashboard</a>
+            <a href="../Dashboard/articles.php" class="nav-item nav-link">Liste Articles</a>
+            <a href="../Dashboard/categories.php" class="nav-item nav-link">Liste Catégories</a>
+        <?php else: ?>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                    <a href="cart.php" class="dropdown-item">Cart</a>
+                    <a href="checkout.php" class="dropdown-item">Checkout</a>
+                    <?php if (isset($_SESSION['user'])) : ?>
+                        <a href="orders.php" class="dropdown-item">My Orders</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+
+
+<a href="contact.php" class="nav-item nav-link">Contact</a>
                     <div class="d-flex m-3 me-0">
                         <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal">
                             <i class="fas fa-search text-primary"></i>
@@ -112,7 +119,7 @@ if (!empty($_SESSION['cart'])) {
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="profile.php"><i class="fas fa-user me-2"></i>Profile</a></li>
                                     <li><a class="dropdown-item" href="orders.php"><i class="fas fa-box-open me-2"></i>My Orders</a></li>
-                                    <?php if ($_SESSION['user']['role'] === 'admin') : ?>
+                                    <?php if ($_SESSION['user']['role'] === 'Admin') : ?>
                                         <li><a class="dropdown-item" href="../Dashboard/index.php"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
                                     <?php endif; ?>
                                     <li><hr class="dropdown-divider"></li>
